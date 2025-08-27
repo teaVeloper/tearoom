@@ -1,0 +1,13 @@
+---
+description: Meta-rule — how to create/extend rules in this project
+globs:
+  - .cursor/rules/**/*.mdc
+alwaysApply: false
+---
+
+When I ask to create a new rule:
+1) Keep it **under 200 lines**, scoped to one topic.
+2) Provide frontmatter with `description`, `globs`, `alwaysApply`.
+3) Reference example files with `@path` hints where helpful.
+4) Prefer checklists and concrete code blocks over prose.
+5) Use my Python and desktop principles from other rules.

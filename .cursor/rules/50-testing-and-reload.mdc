@@ -1,0 +1,12 @@
+---
+description: Safe reloads, validation checks, and troubleshooting
+globs:
+  - config.py
+  - modules/**/*.py
+alwaysApply: false
+---
+
+- Provide `qtile_check.py` to import all modules to catch import errors quickly.
+- Hot reload: bind `mod+Ctrl+r` to `lazy.reload_config()` and `mod+Ctrl+Shift+r` to full restart.
+- On errors, open `kitty` to show the log: `~/.local/share/qtile/qtile.log`.
+- Add a `make validate` target that runs `ruff`, `black --check`, and `python -m pyflakes` on modules.

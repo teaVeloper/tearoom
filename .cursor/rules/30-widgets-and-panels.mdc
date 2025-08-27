@@ -1,0 +1,17 @@
+---
+description: Widgets & panels (Qtile widgets + eww/rofi)
+globs:
+  - modules/widgets.py
+  - modules/screens.py
+alwaysApply: false
+---
+
+- If using **eww** for bars, keep Qtile bar minimal (spacer + systray) or none. If using Qtile bars, avoid very frequent updates.
+- Favor built-ins for stability: `Clock`, `GroupBox`, `WindowName`, `Systray`, `CheckUpdates` (with `distro` autodetect), `PulseVolume` (or custom wrapper for `wpctl`).
+- Centralize **icons** and glyphs in `theme.py` (e.g., Nerd Font codepoints).
+- For **rofi**: themes live under `~/.config/rofi`; rule the AI to generate `.rasi` with a matching palette from `theme.py`.
+- For **eww**: generate YAML + SCSS using palette from `theme.py`. Prefer static scripts for system info (fast, shell) over Python loops.
+
+@modules/theme.py
+@modules/widgets.py
+@modules/screens.py

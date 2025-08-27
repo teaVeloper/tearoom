@@ -1,0 +1,19 @@
+---
+description: Keybinding conventions (mod=SUPER, kitty/neovim/rofi/eww)
+globs:
+  - modules/keys.py
+alwaysApply: false
+---
+
+- Use `mod = "mod4"`. Keep bindings **homogeneous** across layouts.
+- Prefer `Key` and `KeyChord` over ad-hoc scripts. Place **all** bindings in `keys.py`.
+- Launchers: `mod+SPACE` → `rofi -show drun`; `mod+b` → browser; `mod+Return` → `kitty`; `mod+e` → files; `mod+n` → `neovim` in `kitty`.
+- Window mgmt: hjkl for focus **and** arrows as fallback. Provide move/resize chords under `mod+g` (go) and `mod+r` (resize).
+- Audio/brightness/media: use `first_available(["wpctl", "pactl"])`, `brightnessctl`, `playerctl` wrappers.
+- Use media keys on keyboard for media control - i run qmk btw.
+- Provide `mod+Ctrl+r` → reload config; `mod+Shift+q` → close window; `mod+Shift+e` → power menu (rofi/eww).
+- Document every binding as a tuple `(keys, action, note)` at declaration time.
+- Add a keybinding help screen that reads all keybdindings and lists them - can be wrapepd into a beautiful eww widget.
+
+@modules/apps.py
+@modules/utils.py

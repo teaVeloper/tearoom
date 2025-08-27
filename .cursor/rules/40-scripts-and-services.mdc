@@ -1,0 +1,19 @@
+---
+description: Helper scripts & user services (portable Ubuntu/Arch)
+globs:
+  - scripts/**/*
+  - modules/hooks.py
+  - modules/utils.py
+alwaysApply: false
+---
+
+- Place scripts in `~/bin` or `~/.local/bin`. Make them **POSIX sh** when possible.
+- Create user **systemd** units under `~/.config/systemd/user/`. Provide templates for `eww.service`, `keyd.service` etc. Use `systemctl --user`.
+- Cross-distro patterns:
+  - Package manager detection only in a one-off install script; at runtime use generic tools (`xdg-open`, `update-alternatives` neutral commands).
+  - Audio: prefer `wpctl` if available, else fall back to `pactl`.
+  - Network: `nmcli` when possible; don’t shell out to `ifconfig`.
+- Provide a minimal `install.sh` for Arch (pacman) and Ubuntu (apt) but keep **runtime** agnostic.
+
+@scripts/install/install-arch.sh
+@scripts/install/install-ubuntu.sh

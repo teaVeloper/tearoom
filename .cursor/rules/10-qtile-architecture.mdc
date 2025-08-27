@@ -1,0 +1,24 @@
+---
+description: Qtile config architecture (modular, fast, cross-distro)
+globs:
+  - modules/**/*.py
+  - config.py
+alwaysApply: false
+---
+
+- **Modular layout**: `theme.py`, `apps.py`, `utils.py`, `groups.py`, `keys.py`, `layouts.py`, `widgets.py`, `screens.py`, `hooks.py`.
+- **Import discipline**: keep imports at top; avoid importing Qtile inside helpers unless necessary. Use `from libqtile.lazy import lazy` only in key/widget files.
+- **Distro-agnostic**: never hardcode package-manager commands. Provide wrappers in `utils.py`:
+  - `which("cmd") -> str | None` using `shutil.which`
+  - `spawn(cmd: list[str] | str)` → prefers `libqtile.lazy.spawn` for keybinds; `subprocess.Popen` only in hooks.
+  - `first_available(["wpctl", "pactl"])` and similar.
+- **Apps registry** in `apps.py`: centralize commands (`kitty`, `fzf/rofi`, `eww`, `browser`, `files`, `editor`). Keep as lists[str] for safety.
+- **Startup**: in `hooks.py` use `@hook.subscribe.startup_once` to start background daemons and `eww` panels; ensure idempotency.
+- **Performance**: no blocking calls in hooks; prefer small scripts; set widget `update_interval` thoughtfully; avoid heavy Python polling where shell tools suffice.
+- **Multi-monitor**: `screens.py` builds bars/panels per screen; use `Screen(top=...)` and create `def make_screens(n): ...` that detects monitors.
+- **Theming**: all colors, gaps, sizes come from `theme.py`. Never duplicate hex codes.
+
+@modules/theme.py
+@modules/apps.py
+@modules/utils.py
+@modules/screens.py
