@@ -1,7 +1,10 @@
 """Qtile hooks for startup, events, and error handling."""
 from __future__ import annotations
 
+import os
 import subprocess
+import time
+from typing import Final
 
 from libqtile import hook
 
@@ -11,50 +14,31 @@ from .utils import ensure_dir, get_qtile_log_path
 
 @hook.subscribe.startup_once
 def startup_once() -> None:
-    """Run once on Qtile startup - launch daemons and services."""
-    # Ensure Qtile log directory exists
-    log_path = get_qtile_log_path()
-    ensure_dir(log_path.parent)
-
-    # Start eww bar if available (idempotent)
-    if apps.EWW:
-        try:
-            subprocess.Popen(
-                ["eww", "daemon"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            # Small delay to let daemon start
-            subprocess.Popen(
-                ["sleep", "1"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            subprocess.Popen(
-                ["eww", "open", "bar"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except (subprocess.SubprocessError, FileNotFoundError):
-            pass  # eww not available, continue
-
-    # Start other services (non-blocking)
-    services = [
-        ["picom", "--experimental-backends"],  # Compositor
-        ["nm-applet"],  # Network manager
-        ["blueman-applet"],  # Bluetooth manager
-        ["pasystray"],  # PulseAudio system tray
-    ]
-
-    for service in services:
-        try:
-            subprocess.Popen(
-                service,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except (subprocess.SubprocessError, FileNotFoundError):
-            pass  # Service not available, continue
+    """Run once on startup."""
+    # Run the main autostart script
+    autostart_script = os.path.expanduser("~/.config/qtile/autostart.sh")
+    if os.path.exists(autostart_script):
+        subprocess.run([autostart_script], check=False)
+    else:
+        # Fallback to individual commands if script doesn't exist
+        subprocess.run(["eww", "daemon"], check=False)
+        subprocess.run(["picom"], check=False)
+        subprocess.run(["nm-applet"], check=False)
+        subprocess.run(["blueman-applet"], check=False)
+        subprocess.run(["pasystray"], check=False)
+        
+        # Basic screen setup (simple, working version)
+        subprocess.run(["xrandr", "--output", "DP-1", "--primary", "--mode", "2560x1440"], check=False)
+        subprocess.run(["xrandr", "--output", "HDMI-A-0", "--mode", "1920x1080", "--right-of", "DP-1"], check=False)
+        
+        # Set wallpaper (simple, working version)
+        wallpaper_path = os.path.expanduser("~/.config/qtile/wallpaper.jpg")
+        if os.path.exists(wallpaper_path):
+            subprocess.run(["xwallpaper", "--output", "DP-1", "--stretch", wallpaper_path], check=False)
+            subprocess.run(["xwallpaper", "--output", "HDMI-A-0", "--stretch", wallpaper_path], check=False)
+        
+        # Set keyboard layout
+        subprocess.run(["setxkbmap", "us"], check=False)
 
 
 @hook.subscribe.startup

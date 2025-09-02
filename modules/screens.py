@@ -70,7 +70,6 @@ def create_minimal_bar() -> bar.Bar:
         create_window_name(),
         widget.Chord(),
         widget.CurrentLayout(),
-        widget.CurrentScreen(),
         widget.Spacer(),
         create_volume(),
         create_battery(),

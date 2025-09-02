@@ -19,6 +19,8 @@ app_launchers: list[Key] = [
         lazy.spawn(apps.WINDOW_SWITCHER),
         desc="Launch rofi window switcher",
     ),
+    # Test key to verify Qtile is receiving key events
+    Key([mod], "v", lazy.spawn("notify-send 'TEST' 'Super+V works!' -t 2000"), desc="Test key"),
 ]
 
 # System actions
@@ -67,7 +69,7 @@ window_management: list[Key] = [
     Key([mod, "shift"], "f", lazy.window.toggle_floating(), desc="Toggle floating"),
     Key([mod], "n", lazy.layout.reset(), desc="Reset column sizes"),
     # Awesome rofi layout switcher
-    Key([mod, "shift"], "g", lazy.spawn("~/.config/qtile/scripts/layout_switcher.py"), desc="Rofi layout switcher"),
+    Key([mod, "shift"], "g", lazy.spawn("~/.config/qtile/bin/layout_switcher.py"), desc="Rofi layout switcher"),
 ]
 
 # Window resizing (your working setup)
@@ -88,67 +90,51 @@ media_controls: list[Key] = [
     Key(
         [],
         "XF86AudioRaiseVolume",
-        lazy.spawn(
-            f"{apps.VOLUME_UP[0]} {apps.VOLUME_UP[1]} && notify-send 'Volume' 'Volume increased' -t 1000"
-        ),
+        lazy.spawn("/home/bertold/.config/qtile/scripts/volume.sh up && notify-send 'Volume' 'Volume increased' -t 1000"),
         desc="Volume up",
     ),
     Key(
         [],
         "XF86AudioLowerVolume",
-        lazy.spawn(
-            f"{apps.VOLUME_DOWN[0]} {apps.VOLUME_DOWN[1]} && notify-send 'Volume' 'Volume decreased' -t 1000"
-        ),
+        lazy.spawn("/home/bertold/.config/qtile/scripts/volume.sh down && notify-send 'Volume' 'Volume decreased' -t 1000"),
         desc="Volume down",
     ),
     Key(
         [],
         "XF86AudioMute",
-        lazy.spawn(
-            f"{apps.VOLUME_MUTE[0]} {apps.VOLUME_MUTE[1]} && notify-send 'Volume' 'Volume muted' -t 1000"
-        ),
+        lazy.spawn("/home/bertold/.config/qtile/scripts/volume.sh mute && notify-send 'Volume' 'Volume muted' -t 1000"),
         desc="Toggle mute",
     ),
     # Media transport
     Key(
         [],
         "XF86AudioPlay",
-        lazy.spawn(
-            f"{apps.PLAYER_PLAY[0]} {apps.PLAYER_PLAY[1]} && notify-send 'Media' 'Play/Pause' -t 1000"
-        ),
+        lazy.spawn("playerctl play-pause && notify-send 'Media' 'Play/Pause' -t 1000"),
         desc="Play/Pause",
     ),
     Key(
         [],
         "XF86AudioNext",
-        lazy.spawn(
-            f"{apps.PLAYER_NEXT[0]} {apps.PLAYER_NEXT[1]} && notify-send 'Media' 'Next track' -t 1000"
-        ),
+        lazy.spawn("playerctl next && notify-send 'Media' 'Next track' -t 1000"),
         desc="Next track",
     ),
     Key(
         [],
         "XF86AudioPrev",
-        lazy.spawn(
-            f"{apps.PLAYER_PREV[0]} {apps.PLAYER_PREV[1]} && notify-send 'Media' 'Previous track' -t 1000"
-        ),
+        lazy.spawn("playerctl previous && notify-send 'Media' 'Previous track' -t 1000"),
         desc="Previous track",
     ),
     # Brightness with notifications
     Key(
         [],
         "XF86MonBrightnessUp",
-        lazy.spawn(
-            f"{apps.BRIGHTNESS_UP[0]} {apps.BRIGHTNESS_UP[1]} {apps.BRIGHTNESS_UP[2]} && notify-send 'Brightness' 'Brightness increased' -t 1000"
-        ),
+        lazy.spawn("brightnessctl set +5% && notify-send 'Brightness' 'Brightness increased' -t 1000"),
         desc="Brightness up",
     ),
     Key(
         [],
         "XF86MonBrightnessDown",
-        lazy.spawn(
-            f"{apps.BRIGHTNESS_DOWN[0]} {apps.BRIGHTNESS_DOWN[1]} {apps.BRIGHTNESS_DOWN[2]} && notify-send 'Brightness' 'Brightness decreased' -t 1000"
-        ),
+        lazy.spawn("brightnessctl set 5%- && notify-send 'Brightness' 'Brightness decreased' -t 1000"),
         desc="Brightness down",
     ),
     # Screenshot

@@ -30,8 +30,8 @@ LOGOUT: Final[list[str]] = ["qtile", "cmd-obj", "-o", "cmd", "-f", "shutdown"]
 
 # Media controls - using your reliable volume script
 VOLUME_UP: Final[list[str]] = ["~/.config/qtile/scripts/volume.sh", "up"]
-VOLUME_DOWN: Final[list[str]] = ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-"]
-VOLUME_MUTE: Final[list[str]] = ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "mute"]
+VOLUME_DOWN: Final[list[str]] = ["~/.config/qtile/scripts/volume.sh", "down"]
+VOLUME_MUTE: Final[list[str]] = ["~/.config/qtile/scripts/volume.sh", "mute"]
 BRIGHTNESS_UP: Final[list[str]] = ["brightnessctl", "set", "+5%"]
 BRIGHTNESS_DOWN: Final[list[str]] = ["brightnessctl", "set", "5%-"]
 

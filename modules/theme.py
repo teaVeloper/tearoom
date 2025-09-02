@@ -32,6 +32,10 @@ PALETTE: Final[Palette] = {
     "magenta": "#bb9af7",      # Purple
     "cyan": "#7dcfff",         # Bright cyan
     "active_border": "#a855f7", # Brighter purple for active window borders
+    # Monitor-specific colors - distinct but unified with theme
+    "monitor_1": "#7aa2f7",    # Blue for primary monitor (using existing blue)
+    "monitor_2": "#9ece6a",    # Green for secondary monitor (using existing green)
+    "monitor_3": "#bb9af7",    # Magenta for tertiary monitor (using existing magenta)
 }
 
 # Spacing and sizing
