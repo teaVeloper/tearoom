@@ -1,135 +1,102 @@
 # Qtile Configuration
 
-Modular Qtile configuration with keyboard-driven workflow, designed for ultrawide monitors and multiple screens.
+Modular Qtile configuration with Python 3.10+ compatibility, Black/Ruff formatting, and comprehensive type hints.
 
-## Layout
+## Project Structure
 
 ```
 ~/.config/qtile/
-├── config.py              # Main configuration (imports modules)
-├── modules/               # Modular components
-│   ├── theme.py          # Colors, fonts, spacing
-│   ├── utils.py          # Distro-agnostic utilities
-│   ├── apps.py           # Application commands
-│   ├── keys.py           # Keybindings and shortcuts
-│   ├── layouts.py        # Window layouts
-│   ├── widgets.py        # Bar widgets (minimal)
-│   ├── screens.py        # Multi-monitor bars
-│   ├── groups.py         # Workspace groups
-│   └── hooks.py          # Startup and event hooks
-├── scripts/               # Helper shell scripts
-├── qtile_check.py         # Configuration validation
-└── Makefile              # Development tasks
+├── config.py              # Main configuration (imports from modules/)
+├── modules/               # Modular configuration components
+│   ├── theme.py          # Color palette, fonts, spacing
+│   ├── utils.py          # Distro-agnostic helper functions
+│   ├── apps.py           # Application commands and launchers
+│   ├── groups.py         # Workspace groups and scratchpads
+│   ├── keys.py           # Keybindings and mouse bindings
+│   ├── layouts.py        # Window layouts and floating rules
+│   ├── widgets.py        # Qtile bar widgets
+│   ├── screens.py        # Multi-monitor bar configuration
+│   └── hooks.py          # Startup, shutdown, and event hooks
+├── bin/                   # Qtile runtime helper scripts
+│   ├── volume.sh         # Volume control
+│   ├── power-menu.sh     # Power management
+│   ├── layout_switcher.py # Layout switching via Rofi
+│   ├── fix-keyboard-system.sh # Runtime keyboard fix
+│   └── check-devices.sh  # Input device diagnostics
+├── setup/                 # Installation and setup scripts
+│   ├── install-keyboard-fix-systemd.sh # Systemd service install
+│   └── install-keyboard-fix-udev.sh    # Udev rules install
+└── scripts/               # Legacy scripts (deprecated)
 ```
 
 ## Keybindings
 
-### Organization
-The keybindings are organized into logical groups for easy management:
-- **app_launchers**: Terminal, browser, file manager, launchers
-- **system_actions**: Close, reload, shutdown, lock, screenshot
-- **navigation_keys**: Vim-style window focus navigation
-- **window_management**: Move windows, layout control, floating
-- **window_resize**: Resize operations (Super+Ctrl+h/j/k/l)
-- **media_controls**: Volume, media transport, brightness with notifications
-
-To disable a group, comment out its line in the merge section of `modules/keys.py`.
-
-### Core Navigation
+### Application Launchers
 - `Super+Return` - Launch kitty terminal
-- `Super+Space` - Rofi application launcher (drun)
-- `Super+b` - Launch Firefox directly
-- `Super+f` - Open file manager
-- `Super+BackSpace` - Rofi window switcher
+- `Super+Space` - Rofi application launcher
+- `Super+b` - Launch Firefox browser
+- `Super+f` - Open file manager in current directory
 
 ### Window Management
-- `Super+h/j/k/l` - Navigate windows (vim-style)
-- `Super+Shift+h/j/k/l` - Move windows
-- `Super+Ctrl+h/j/k/l` - Resize windows (your working setup!)
-- `Super+Ctrl+Shift+h/l` - Shrink columns
-- `Super+Tab` - Next layout
-- `Super+q` - Close window
+- `Super+h/j/k/l` - Focus windows (vim-style)
+- `Super+Shift+h/j/k/l` - Move windows between layouts
+- `Super+Ctrl+h/j/k/l` - Resize windows
 - `Super+Shift+f` - Toggle floating
+- `Super+n` - Reset layout
 
-### Mouse Behavior
-- **Click to Focus**: Windows only activate when clicked (no mouse-following)
-- **Active Window Border**: Bright purple border (`#a855f7`) around focused windows - 4px wide
-- **Resize/Move**: Hold `Super` + drag for window operations
+### Layout & Groups
+- `Super+Tab` - Next layout
+- `Super+Shift+Tab` - Previous layout
+- `Super+Shift+g` - Rofi layout switcher
+- `Super+1-9` - Switch to workspace groups
 
-### System Controls
-- `Super+Ctrl+r` - Reload Qtile configuration
-- `Super+Ctrl+q` - Shutdown Qtile
-- `Super+Shift+z` - Lock screen
-- `Super+Shift+s` - Take screenshot
-- `Super+Ctrl+o` - View Qtile log in kitty
+### Power Management
+- `Super+Alt+Ctrl+Escape` - Suspend
+- `Super+Alt+Ctrl+Return` - Shutdown
+- `Super+Alt+Ctrl+r` - Reboot
+- `Super+Alt+Ctrl+l` - Logout
 
-### Power Management (No Confirmation - Hard to Press Accidentally)
-- `Super+Alt+Ctrl+Escape` - Suspend system
-- `Super+Alt+Ctrl+Return` - Shutdown system
-- `Super+Alt+Ctrl+r` - Reboot system
-- `Super+Alt+Ctrl+l` - Logout Qtile
-- `Super+Alt+Ctrl+p` - Power menu (rofi)
+### Media Controls
+- `XF86Audio*` - Volume control (with visual feedback)
+- `XF86MonBrightness*` - Brightness control
+- `Print` - Screenshot
 
-### Media Controls (with visual feedback)
-- Volume keys - Volume control with notifications
-- Media transport - Player controls with notifications
-- Brightness keys - Brightness control with notifications
+## Mouse Behavior
+
+- **Click-to-focus only** - Mouse movement doesn't steal focus
+- **Visible active window** - Bright purple border (4px) for active windows
+- **Window resizing** - Mod+LeftButton drag to resize, Mod+MiddleButton drag to move
 
 ## Development
 
-### Quick Start
 ```bash
-# Install development tools
-make install
+# Format and lint
+make fmt
 
-# Format and validate
-make dev
+# Check code quality
+make check
+
+# Validate configuration
+make validate
 
 # Quick validation
 make quick-validate
-```
 
-### Available Commands
-- `make fmt` - Format code with black and ruff
-- `make check` - Run linting and formatting checks
-- `make validate` - Full configuration validation (includes duplicate keybinding check)
-- `make check-keys` - Check keybindings for duplicates only
-- `make clean` - Remove Python cache files
+# Check keybindings
+make check-keys
+```
 
 ## Reload & Debug
 
-### Reload Configuration
-```bash
-# From terminal
-qtile cmd-obj -o cmd -f reload_config
-
-# Or use keybinding: Super+Ctrl+r
-```
-
-### View Logs
-```bash
-# View Qtile log
-kitty -e nvim ~/.local/share/qtile/qtile.log
-
-# Or use keybinding: Super+Ctrl+o
-```
-
-### Troubleshooting
-1. Run `python3 qtile_check.py` to validate imports
-2. Check `~/.local/share/qtile/qtile.log` for errors
-3. Use `make validate` for comprehensive checks
+- **Reload**: `Super+Ctrl+r` (reloads configuration)
+- **Restart**: `Super+Ctrl+q` (restarts Qtile)
+- **View logs**: `Super+Ctrl+o` (opens Qtile log in kitty)
 
 ## Features
 
-- **Modular Design**: Clean separation of concerns
-- **Keyboard-First**: Vim-style navigation with arrow fallbacks
-- **Multi-Monitor**: Adaptive bars per screen
-- **Distro-Agnostic**: Works on Ubuntu, Arch, and others
-- **Type Safe**: Full Python 3.10+ type hints
-- **Fast Startup**: Minimal Python overhead
-- **Group 1 Default**: Uses MonadThreeCol layout for ultrawide
-- **Working Resize**: Restored your Super+Ctrl+h/j/k/l resize setup
-- **Visual Feedback**: Notifications for media controls
-- **Direct Firefox**: Launches Firefox directly, not new tabs
-- **Duplicate-Free**: Automatic keybinding conflict detection
-- **Organized Keys**: Named keybinding groups for easy management
+- **Modular configuration** - Easy to maintain and extend
+- **Multi-monitor support** - Automatic bar configuration per screen
+- **Tokyo Night theme** - Dark theme with purple accents
+- **Distro-agnostic** - Works on Ubuntu, Arch, and other distributions
+- **Fast startup** - No blocking operations during import
+- **Type safety** - Full Python 3.10+ type hints throughout
