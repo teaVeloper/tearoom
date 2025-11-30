@@ -1,0 +1,3 @@
+# Prevent ZSA Moonlander from USB autosuspend
+# This fixes the issue where the keyboard is not available during boot/login
+SUBSYSTEM=="usb", ATTRS{idVendor}=="3297", ATTRS{idProduct}=="1969", ATTR{power/autosuspend_delay_ms}="-1"
