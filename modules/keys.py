@@ -7,6 +7,11 @@ from libqtile.lazy import lazy
 from . import apps
 from .constants import mod
 
+from pathlib import Path
+HOME = str(Path.home())
+
+
+
 # Core application launchers
 app_launchers: list[Key] = [
     Key([mod], "Return", lazy.spawn(apps.KITTY), desc="Launch kitty terminal"),
@@ -90,19 +95,19 @@ media_controls: list[Key] = [
     Key(
         [],
         "XF86AudioRaiseVolume",
-        lazy.spawn("/home/bertold/.config/qtile/scripts/volume.sh up && notify-send 'Volume' 'Volume increased' -t 1000"),
+        lazy.spawn(f"{HOME}/.config/qtile/scripts/volume.sh up && notify-send 'Volume' 'Volume increased' -t 1000"),
         desc="Volume up",
     ),
     Key(
         [],
         "XF86AudioLowerVolume",
-        lazy.spawn("/home/bertold/.config/qtile/scripts/volume.sh down && notify-send 'Volume' 'Volume decreased' -t 1000"),
+        lazy.spawn(f"{HOME}/.config/qtile/scripts/volume.sh down && notify-send 'Volume' 'Volume decreased' -t 1000"),
         desc="Volume down",
     ),
     Key(
         [],
         "XF86AudioMute",
-        lazy.spawn("/home/bertold/.config/qtile/scripts/volume.sh mute && notify-send 'Volume' 'Volume muted' -t 1000"),
+        lazy.spawn(f"{HOME}/.config/qtile/scripts/volume.sh mute && notify-send 'Volume' 'Volume muted' -t 1000"),
         desc="Toggle mute",
     ),
     # Media transport

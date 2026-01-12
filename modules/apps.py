@@ -2,6 +2,10 @@
 from __future__ import annotations
 
 from typing import Final
+from pathlib import Path
+
+# SET HOME
+HOME = str(Path.home())
 
 # Terminal and editor
 KITTY: Final[list[str]] = ["kitty"]
@@ -29,9 +33,10 @@ REBOOT: Final[list[str]] = ["systemctl", "reboot"]
 LOGOUT: Final[list[str]] = ["qtile", "cmd-obj", "-o", "cmd", "-f", "shutdown"]
 
 # Media controls - using your reliable volume script
-VOLUME_UP: Final[list[str]] = ["~/.config/qtile/scripts/volume.sh", "up"]
-VOLUME_DOWN: Final[list[str]] = ["~/.config/qtile/scripts/volume.sh", "down"]
-VOLUME_MUTE: Final[list[str]] = ["~/.config/qtile/scripts/volume.sh", "mute"]
+
+VOLUME_UP   = [f"{HOME}/.config/qtile/scripts/volume.sh", "up"]
+VOLUME_DOWN = [f"{HOME}/.config/qtile/scripts/volume.sh", "down"]
+VOLUME_MUTE = [f"{HOME}/.config/qtile/scripts/volume.sh", "mute"]
 BRIGHTNESS_UP: Final[list[str]] = ["brightnessctl", "set", "+5%"]
 BRIGHTNESS_DOWN: Final[list[str]] = ["brightnessctl", "set", "5%-"]
 

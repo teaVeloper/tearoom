@@ -10,6 +10,10 @@ from modules.keys import keys, mouse
 from modules.layouts import floating_layout, layouts
 from modules.screens import screens
 from modules.theme import GAP
+# Import hooks so @hook.subscribe handlers are registered.
+# This module is imported for its side effects.
+from modules import hooks  # noqa: F401
+
 
 # Global configuration
 auto_fullscreen = True

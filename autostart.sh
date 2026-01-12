@@ -1,28 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
+# Helpers
+have() { command -v "$1" >/dev/null 2>&1; }
+run_bg_once() { pgrep -xu "$USER" "$1" >/dev/null 2>&1 || "$@" & }
 
-# Apply monitor layout FIRST
-xrandr \
-  --output DVI-I-1-1 --mode 5120x1440 --pos 1920x0 --primary \
-  --output DVI-I-2-2 --mode 2560x1440 --pos 7040x0 \
-  --output eDP-1     --mode 1920x1080 --pos 0x147
+# 1) Screen layout
+if have autorandr; then
+  # Use autorandr profiles if available (best for office/home switching)
+  autorandr --change --force || true
+else
+  # Fallback: just enable what’s connected
+  have xrandr && xrandr --auto || true
+fi
 
-# Wait for monitors to be configured
-sleep 1
+# 2) Wallpaper (no per-output hardcoding)
+WALLPAPER="${WALLPAPER:-$HOME/Pictures/vivek-kumar-JS_ohjocm00-unsplash.jpg}"
+if have xwallpaper && [[ -f "$WALLPAPER" ]]; then
+  xwallpaper --stretch "$WALLPAPER" || true
+fi
 
-# Set wallpaper AFTER monitor configuration
-WALLPAPER=~/Pictures/vivek-kumar-JS_ohjocm00-unsplash.jpg
-xwallpaper --output DVI-I-1-1 --stretch "$WALLPAPER" \
-           --output DVI-I-2-2 --stretch "$WALLPAPER" \
-           --output eDP-1     --stretch "$WALLPAPER"
+# 3) Keyboard layout (Qtile session only; greeter is separate)
+have setxkbmap && setxkbmap us || true
 
+# 4) Compositor
+have picom && run_bg_once picom picom
 
-# Set keyboard layout
-setxkbmap us
+# 5) Tray helpers (optional; pick what you actually use)
+have nm-applet && run_bg_once nm-applet nm-applet
+have blueman-applet && run_bg_once blueman-applet blueman-applet
+have pasystray && run_bg_once pasystray pasystray
 
-# Start compositor for transparency
-picom &
-
-# Start flameshot in tray
-# flameshot &
-
+# 6) Screenshot tool (flameshot can be annoying; keep optional)
+# have flameshot && run_bg_once flameshot flameshot
