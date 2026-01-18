@@ -16,7 +16,7 @@ from libqtile import hook
 def startup_once() -> None:
     """Run once on startup."""
     # Run the main autostart script
-    autostart_script = os.path.expanduser("~/.config/qtile/autostart.sh")
+    autostart_script = os.path.expanduser("~/.config/qtile/scripts/autostart.sh")
     if os.path.exists(autostart_script):
         subprocess.run([autostart_script], check=False)
     else:
