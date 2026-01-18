@@ -1,13 +1,19 @@
-"""Layout configurations for Qtile - sensible defaults with theme integration."""
+"""
+layouts
+=======
+Layout configurations for Qtile - sensible defaults with theme integration.
+"""
+
 from __future__ import annotations
 
 from libqtile import layout
 from libqtile.config import Match
+from libqtile.layout.base import Layout
 
 from .theme import LAYOUT_THEME
 
 # Core layouts with consistent theming
-layouts: list[layout.Layout] = [
+layouts: list[Layout] = [
     # Primary tiling layout - perfect for ultrawide monitors
     layout.Columns(
         **LAYOUT_THEME,

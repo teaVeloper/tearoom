@@ -1,5 +1,12 @@
-"""Comprehensive keybindings for Qtile configuration - SUPER-based navigation."""
+"""
+keys
+====
+Comprehensive keybindings for Qtile configuration - SUPER-based navigation.
+"""
+
 from __future__ import annotations
+
+from pathlib import Path
 
 from libqtile.config import Key, Mouse
 from libqtile.lazy import lazy
@@ -7,9 +14,7 @@ from libqtile.lazy import lazy
 from . import apps
 from .constants import mod
 
-from pathlib import Path
 HOME = str(Path.home())
-
 
 
 # Core application launchers
@@ -25,7 +30,12 @@ app_launchers: list[Key] = [
         desc="Launch rofi window switcher",
     ),
     # Test key to verify Qtile is receiving key events
-    Key([mod], "v", lazy.spawn("notify-send 'TEST' 'Super+V works!' -t 2000"), desc="Test key"),
+    Key(
+        [mod],
+        "v",
+        lazy.spawn("notify-send 'TEST' 'Super+V works!' -t 2000"),
+        desc="Test key",
+    ),
 ]
 
 # System actions
@@ -39,12 +49,27 @@ system_actions: list[Key] = [
 
 # Power management (hard to press accidentally - no confirmation needed)
 power_actions: list[Key] = [
-    Key([mod, "mod1", "control"], "Escape", lazy.spawn(apps.SUSPEND), desc="Suspend system"),
-    Key([mod, "mod1", "control"], "Return", lazy.spawn(apps.SHUTDOWN), desc="Shutdown system"),
+    Key(
+        [mod, "mod1", "control"],
+        "Escape",
+        lazy.spawn(apps.SUSPEND),
+        desc="Suspend system",
+    ),
+    Key(
+        [mod, "mod1", "control"],
+        "Return",
+        lazy.spawn(apps.SHUTDOWN),
+        desc="Shutdown system",
+    ),
     Key([mod, "mod1", "control"], "r", lazy.spawn(apps.REBOOT), desc="Reboot system"),
     Key([mod, "mod1", "control"], "l", lazy.spawn(apps.LOGOUT), desc="Logout Qtile"),
     # Power menu for more options
-    Key([mod, "mod1", "control"], "p", lazy.spawn("rofi -show power-menu -modi power-menu:rofi-power-menu"), desc="Power menu"),
+    Key(
+        [mod, "mod1", "control"],
+        "p",
+        lazy.spawn("rofi -show power-menu -modi power-menu:rofi-power-menu"),
+        desc="Power menu",
+    ),
 ]
 
 # Navigation keys (vim-style with arrow fallbacks)
@@ -74,7 +99,12 @@ window_management: list[Key] = [
     Key([mod, "shift"], "f", lazy.window.toggle_floating(), desc="Toggle floating"),
     Key([mod], "n", lazy.layout.reset(), desc="Reset column sizes"),
     # Awesome rofi layout switcher
-    Key([mod, "shift"], "g", lazy.spawn("~/.config/qtile/bin/layout_switcher.py"), desc="Rofi layout switcher"),
+    Key(
+        [mod, "shift"],
+        "g",
+        lazy.spawn("~/.config/qtile/bin/layout_switcher.py"),
+        desc="Rofi layout switcher",
+    ),
 ]
 
 # Window resizing (your working setup)
@@ -95,19 +125,25 @@ media_controls: list[Key] = [
     Key(
         [],
         "XF86AudioRaiseVolume",
-        lazy.spawn(f"{HOME}/.config/qtile/scripts/volume.sh up && notify-send 'Volume' 'Volume increased' -t 1000"),
+        lazy.spawn(
+            f"{HOME}/.config/qtile/scripts/volume.sh up && notify-send 'Volume' 'Volume increased' -t 1000"
+        ),
         desc="Volume up",
     ),
     Key(
         [],
         "XF86AudioLowerVolume",
-        lazy.spawn(f"{HOME}/.config/qtile/scripts/volume.sh down && notify-send 'Volume' 'Volume decreased' -t 1000"),
+        lazy.spawn(
+            f"{HOME}/.config/qtile/scripts/volume.sh down && notify-send 'Volume' 'Volume decreased' -t 1000"
+        ),
         desc="Volume down",
     ),
     Key(
         [],
         "XF86AudioMute",
-        lazy.spawn(f"{HOME}/.config/qtile/scripts/volume.sh mute && notify-send 'Volume' 'Volume muted' -t 1000"),
+        lazy.spawn(
+            f"{HOME}/.config/qtile/scripts/volume.sh mute && notify-send 'Volume' 'Volume muted' -t 1000"
+        ),
         desc="Toggle mute",
     ),
     # Media transport
@@ -126,20 +162,26 @@ media_controls: list[Key] = [
     Key(
         [],
         "XF86AudioPrev",
-        lazy.spawn("playerctl previous && notify-send 'Media' 'Previous track' -t 1000"),
+        lazy.spawn(
+            "playerctl previous && notify-send 'Media' 'Previous track' -t 1000"
+        ),
         desc="Previous track",
     ),
     # Brightness with notifications
     Key(
         [],
         "XF86MonBrightnessUp",
-        lazy.spawn("brightnessctl set +5% && notify-send 'Brightness' 'Brightness increased' -t 1000"),
+        lazy.spawn(
+            "brightnessctl set +5% && notify-send 'Brightness' 'Brightness increased' -t 1000"
+        ),
         desc="Brightness up",
     ),
     Key(
         [],
         "XF86MonBrightnessDown",
-        lazy.spawn("brightnessctl set 5%- && notify-send 'Brightness' 'Brightness decreased' -t 1000"),
+        lazy.spawn(
+            "brightnessctl set 5%- && notify-send 'Brightness' 'Brightness decreased' -t 1000"
+        ),
         desc="Brightness down",
     ),
     # Screenshot

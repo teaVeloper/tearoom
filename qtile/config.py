@@ -4,15 +4,18 @@ from __future__ import annotations
 
 from libqtile.config import Key, Match
 from libqtile.lazy import lazy
-from modules.constants import mod
-from modules.groups import group_keys, groups
-from modules.keys import keys, mouse
-from modules.layouts import floating_layout, layouts
-from modules.screens import screens
-from modules.theme import GAP
+
+# own modules
+from tearoom.constants import mod
+from tearoom.groups import group_keys, groups
+from tearoom.keys import keys, mouse
+from tearoom.layouts import floating_layout, layouts
+from tearoom.screens import screens
+from tearoom.theme import GAP
+
 # Import hooks so @hook.subscribe handlers are registered.
 # This module is imported for its side effects.
-from modules import hooks  # noqa: F401
+from tearoom import hooks  # noqa: F401
 
 
 # Global configuration
@@ -26,12 +29,12 @@ follow_mouse_focus = False  # Disable mouse-following focus completely
 # Gaps and spacing
 margin = GAP
 
-# Screen configurations (imported from modules/screens.py)
+# Screen configurations (imported from tearoom/screens.py)
 # Qtile requires screens to be defined at module level
 screens = screens
 layouts = layouts
 
-# Additional floating rules (extend the ones from modules/layouts.py)
+# Additional floating rules (extend the ones from tearoom/layouts.py)
 additional_float_rules = [
     Match(wm_class="confirmreset"),
     Match(wm_class="makebranch"),

@@ -1,4 +1,9 @@
-"""Group configurations for Qtile - workspace organization."""
+"""
+groups
+======
+Group configurations for Qtile - workspace organization.
+"""
+
 from __future__ import annotations
 
 from libqtile.config import DropDown, Group, Key, ScratchPad

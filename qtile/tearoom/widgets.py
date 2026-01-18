@@ -1,4 +1,9 @@
-"""Essential Qtile widgets - minimal set for basic functionality."""
+"""
+widgets
+=======
+Essential Qtile widgets - minimal set for basic functionality.
+"""
+
 from __future__ import annotations
 
 import subprocess
@@ -23,19 +28,17 @@ def create_group_box() -> widget.GroupBox:
     """Create group box widget with nice, subtle colors."""
     return widget.GroupBox(
         # Nice, subtle colors
-        active=PALETTE["fg"],           # Active groups in main text color
-        inactive=PALETTE["fg_alt"],     # Inactive groups in muted text color
+        active=PALETTE["fg"],  # Active groups in main text color
+        inactive=PALETTE["fg_alt"],  # Inactive groups in muted text color
         block_highlight_text_color=PALETTE["bg"],
         highlight_color=PALETTE["magenta"],
         urgent_alert_method="border",
         urgent_border=PALETTE["red"],
-        
         # Subtle monitor colors - these only show current vs other screens
-        this_current_screen_border=PALETTE["monitor_1"],      # Current monitor groups
-        this_screen_border=PALETTE["monitor_1"],              # Current monitor groups
-        other_current_screen_border=PALETTE["monitor_2"],     # Other monitor active groups
-        other_screen_border=PALETTE["monitor_3"],             # Other monitor inactive groups
-        
+        this_current_screen_border=PALETTE["monitor_1"],  # Current monitor groups
+        this_screen_border=PALETTE["monitor_1"],  # Current monitor groups
+        other_current_screen_border=PALETTE["monitor_2"],  # Other monitor active groups
+        other_screen_border=PALETTE["monitor_3"],  # Other monitor inactive groups
         # Visual styling
         borderwidth=3,
         padding=6,
@@ -91,10 +94,16 @@ def create_battery() -> widget.Battery:
 def create_volume() -> widget.GenPollText:
     """Create custom mute status indicator using same method as volume script."""
     return widget.GenPollText(
-        func=lambda: "🔇" if "yes" in subprocess.run(
-            ["pactl", "get-sink-mute", "@DEFAULT_SINK@"], 
-            capture_output=True, text=True
-        ).stdout else "🔊",
+        func=lambda: (
+            "🔇"
+            if "yes"
+            in subprocess.run(
+                ["pactl", "get-sink-mute", "@DEFAULT_SINK@"],
+                capture_output=True,
+                text=True,
+            ).stdout
+            else "🔊"
+        ),
         update_interval=0.5,  # Update every 0.5 seconds (more responsive)
         fmt="{}",
         mouse_callbacks={"Button1": lambda: None},  # No click functionality

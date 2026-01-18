@@ -1,0 +1,72 @@
+[project]
+name = "tearoom"
+version = "2026.1.17"
+description = "Tearoom my qtile config"
+authors = [{name = "Bertold Sedlak", email = "bertold.sedlak@gmail.com"}]
+requires-python = ">=3.10"
+dependencies = [
+    "qtile>=0.33.0",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "N", "UP", "ANN", "PL"]
+ignore = [
+  "E501",      # keep, black handles it
+  "ANN101",    # self
+  "ANN102",    # cls
+  "PLR0913",   # many args (qtile callbacks etc)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401"]
+
+
+[tool.mypy]
+python_version = "3.10"
+
+[[tool.mypy.overrides]]
+module = ["libqtile.*"]
+ignore_missing_imports = true
+
+
+[dependency-groups]
+dev = [
+    "black>=25.12.0",
+    "bump-my-version>=1.2.6",
+    "isort>=7.0.0",
+    "mypy>=1.19.1",
+    "ruff>=0.14.13",
+]
+
+[tool.bumpversion]
+current_version = "2026.1.17"
+parse = """(?x)                     # Verbose mode
+    (?P<release>                    # The release part
+        (?:[1-9][0-9]{3})\\.        # YYYY.
+        (?:1[0-2]|[1-9])\\.         # MM.
+        (?:3[0-1]|[1-2][0-9]|[1-9]) # DD
+    )
+    (?:\\.(?P<patch>\\d+))?         # .patch, optional
+"""
+serialize = ["{release}.{patch}", "{release}"]
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'current_version = "{current_version}"'
+replace = 'current_version = "{new_version}"'
+
+[tool.bumpversion.parts.release]
+calver_format = "{YYYY}.{MM}.{DD}"

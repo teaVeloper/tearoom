@@ -1,4 +1,9 @@
-"""Qtile theme configuration with color palette, fonts, and spacing."""
+"""
+theme
+=====
+Qtile theme configuration with color palette, fonts, and spacing.
+"""
+
 from __future__ import annotations
 
 from typing import Final, TypedDict
@@ -21,21 +26,21 @@ class Palette(TypedDict):
 
 PALETTE: Final[Palette] = {
     # Tokyo Night inspired dark theme
-    "bg": "#1a1b26",           # Dark background
-    "bg_alt": "#24283b",       # Slightly lighter background
-    "fg": "#c0caf5",           # Light text
-    "fg_alt": "#7982a9",       # Muted text
-    "red": "#f7768e",          # Bright red
-    "green": "#9ece6a",        # Bright green
-    "yellow": "#e0af68",       # Warm yellow
-    "blue": "#7aa2f7",         # Bright blue
-    "magenta": "#bb9af7",      # Purple
-    "cyan": "#7dcfff",         # Bright cyan
-    "active_border": "#a855f7", # Brighter purple for active window borders
+    "bg": "#1a1b26",  # Dark background
+    "bg_alt": "#24283b",  # Slightly lighter background
+    "fg": "#c0caf5",  # Light text
+    "fg_alt": "#7982a9",  # Muted text
+    "red": "#f7768e",  # Bright red
+    "green": "#9ece6a",  # Bright green
+    "yellow": "#e0af68",  # Warm yellow
+    "blue": "#7aa2f7",  # Bright blue
+    "magenta": "#bb9af7",  # Purple
+    "cyan": "#7dcfff",  # Bright cyan
+    "active_border": "#a855f7",  # Brighter purple for active window borders
     # Monitor-specific colors - distinct but unified with theme
-    "monitor_1": "#7aa2f7",    # Blue for primary monitor (using existing blue)
-    "monitor_2": "#9ece6a",    # Green for secondary monitor (using existing green)
-    "monitor_3": "#bb9af7",    # Magenta for tertiary monitor (using existing magenta)
+    "monitor_1": "#7aa2f7",  # Blue for primary monitor (using existing blue)
+    "monitor_2": "#9ece6a",  # Green for secondary monitor (using existing green)
+    "monitor_3": "#bb9af7",  # Magenta for tertiary monitor (using existing magenta)
 }
 
 # Spacing and sizing
@@ -58,5 +63,5 @@ LAYOUT_THEME: Final[dict[str, int | str]] = {
     "border_width": BORDER_WIDTH,
     "margin": MARGIN,
     "border_focus": PALETTE["active_border"],  # Dark purple for active windows
-    "border_normal": "#444444",                # Subtle gray for inactive windows
+    "border_normal": "#444444",  # Subtle gray for inactive windows
 }

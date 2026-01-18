@@ -1,8 +1,13 @@
-"""Application commands and launchers for Qtile configuration."""
+"""
+apps
+====
+Application commands and launchers for Qtile configuration.
+"""
+
 from __future__ import annotations
 
-from typing import Final
 from pathlib import Path
+from typing import Final
 
 # SET HOME
 HOME = str(Path.home())
@@ -34,7 +39,7 @@ LOGOUT: Final[list[str]] = ["qtile", "cmd-obj", "-o", "cmd", "-f", "shutdown"]
 
 # Media controls - using your reliable volume script
 
-VOLUME_UP   = [f"{HOME}/.config/qtile/scripts/volume.sh", "up"]
+VOLUME_UP = [f"{HOME}/.config/qtile/scripts/volume.sh", "up"]
 VOLUME_DOWN = [f"{HOME}/.config/qtile/scripts/volume.sh", "down"]
 VOLUME_MUTE = [f"{HOME}/.config/qtile/scripts/volume.sh", "mute"]
 BRIGHTNESS_UP: Final[list[str]] = ["brightnessctl", "set", "+5%"]

@@ -1,15 +1,15 @@
-"""Qtile hooks for startup, events, and error handling."""
+"""
+hooks
+=====
+Qtile hooks for startup, events, and error handling.
+"""
+
 from __future__ import annotations
 
 import os
 import subprocess
-import time
-from typing import Final
 
 from libqtile import hook
-
-from . import apps
-from .utils import ensure_dir, get_qtile_log_path
 
 
 @hook.subscribe.startup_once
@@ -26,17 +26,37 @@ def startup_once() -> None:
         subprocess.run(["nm-applet"], check=False)
         subprocess.run(["blueman-applet"], check=False)
         subprocess.run(["pasystray"], check=False)
-        
+
         # Basic screen setup (simple, working version)
-        subprocess.run(["xrandr", "--output", "DP-1", "--primary", "--mode", "2560x1440"], check=False)
-        subprocess.run(["xrandr", "--output", "HDMI-A-0", "--mode", "1920x1080", "--right-of", "DP-1"], check=False)
-        
+        subprocess.run(
+            ["xrandr", "--output", "DP-1", "--primary", "--mode", "2560x1440"],
+            check=False,
+        )
+        subprocess.run(
+            [
+                "xrandr",
+                "--output",
+                "HDMI-A-0",
+                "--mode",
+                "1920x1080",
+                "--right-of",
+                "DP-1",
+            ],
+            check=False,
+        )
+
         # Set wallpaper (simple, working version)
         wallpaper_path = os.path.expanduser("~/.config/qtile/wallpaper.jpg")
         if os.path.exists(wallpaper_path):
-            subprocess.run(["xwallpaper", "--output", "DP-1", "--stretch", wallpaper_path], check=False)
-            subprocess.run(["xwallpaper", "--output", "HDMI-A-0", "--stretch", wallpaper_path], check=False)
-        
+            subprocess.run(
+                ["xwallpaper", "--output", "DP-1", "--stretch", wallpaper_path],
+                check=False,
+            )
+            subprocess.run(
+                ["xwallpaper", "--output", "HDMI-A-0", "--stretch", wallpaper_path],
+                check=False,
+            )
+
         # Set keyboard layout
         subprocess.run(["setxkbmap", "us"], check=False)
 

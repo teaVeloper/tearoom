@@ -1,4 +1,9 @@
-"""Utility functions for Qtile configuration - distro-agnostic helpers."""
+"""
+utils
+=====
+Utility functions for Qtile configuration - distro-agnostic helpers.
+"""
+
 from __future__ import annotations
 
 import subprocess

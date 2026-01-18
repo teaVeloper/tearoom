@@ -1,4 +1,9 @@
-"""Screen configurations for Qtile - bars and panels per monitor."""
+"""
+screens
+=======
+Screen configurations for Qtile - bars and panels per monitor.
+"""
+
 from __future__ import annotations
 
 from libqtile import bar, widget
