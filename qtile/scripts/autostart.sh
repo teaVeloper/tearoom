@@ -6,13 +6,7 @@ have() { command -v "$1" >/dev/null 2>&1; }
 run_bg_once() { pgrep -xu "$USER" "$1" >/dev/null 2>&1 || "$@" & }
 
 # 1) Screen layout
-if have autorandr; then
-  # Use autorandr profiles if available (best for office/home switching)
-  autorandr --change --force || true
-else
-  # Fallback: just enable what’s connected
-  have xrandr && xrandr --auto || true
-fi
+xrandr --output DVI-I-2-2 --mode 5120x1440 --pos 1920x0 --primary --output DVI-I-1-1 --mode 2560x1440 --rate 60 --pos 7040x0 --output eDP-1 --mode 1920x1200 --pos 0x0
 
 # 2) Wallpaper (no per-output hardcoding)
 WALLPAPER="${WALLPAPER:-$HOME/Pictures/vivek-kumar-JS_ohjocm00-unsplash.jpg}"
@@ -24,7 +18,7 @@ fi
 have setxkbmap && setxkbmap us || true
 
 # 4) Compositor
-have picom && run_bg_once picom picom
+have picom && run_bg_once picom
 
 # 5) Tray helpers (optional; pick what you actually use)
 have nm-applet && run_bg_once nm-applet nm-applet
