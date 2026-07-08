@@ -6,19 +6,40 @@ Qtile hooks for startup, events, and error handling.
 
 from __future__ import annotations
 
+import logging
 import os
 import subprocess
 
 from libqtile import hook
 
+from .display import apply_profile, infer_and_apply, trandr_env
+from .paths import compute_paths
+from .settings import load_cfg
+
+LOG = logging.getLogger(__name__)
+
+
+def _display_env(cfg: object) -> dict[str, str]:
+    env = trandr_env()
+    startup_profile = getattr(cfg, "startup_profile", None)
+    if startup_profile:
+        env["TRANDR_STARTUP_PROFILE"] = startup_profile
+    startup_laptop_position = getattr(cfg, "startup_laptop_position", None)
+    if startup_laptop_position:
+        env["TRANDR_INFER_LAPTOP_POSITION"] = startup_laptop_position
+    env["TRANDR_PRIMARY"] = getattr(cfg, "primary", "laptop")
+    return env
+
 
 @hook.subscribe.startup_once
 def startup_once() -> None:
     """Run once on startup."""
-    # Run the main autostart script
-    autostart_script = os.path.expanduser("~/.config/qtile/scripts/autostart.sh")
+    paths = compute_paths()
+    cfg = load_cfg(paths)
+    autostart_script = cfg.core.autostart_script or paths.autostart_script_default
+
     if os.path.exists(autostart_script):
-        subprocess.run([autostart_script], check=False)
+        subprocess.run([str(autostart_script)], check=False, env=_display_env(cfg.trandr))
     else:
         # Fallback to individual commands if script doesn't exist
         subprocess.run(["eww", "daemon"], check=False)
@@ -27,23 +48,14 @@ def startup_once() -> None:
         subprocess.run(["blueman-applet"], check=False)
         subprocess.run(["pasystray"], check=False)
 
-        # Basic screen setup (simple, working version)
-        subprocess.run(
-            ["xrandr", "--output", "DP-1", "--primary", "--mode", "2560x1440"],
-            check=False,
-        )
-        subprocess.run(
-            [
-                "xrandr",
-                "--output",
-                "HDMI-A-0",
-                "--mode",
-                "1920x1080",
-                "--right-of",
-                "DP-1",
-            ],
-            check=False,
-        )
+        if cfg.trandr.startup_profile:
+            apply_profile(cfg.trandr.startup_profile, check=False)
+        elif cfg.trandr.startup_laptop_position:
+            infer_and_apply(
+                cfg.trandr.startup_laptop_position,
+                primary=cfg.trandr.primary,
+                check=False,
+            )
 
         # Set wallpaper (simple, working version)
         wallpaper_path = os.path.expanduser("~/.config/qtile/wallpaper.jpg")
@@ -101,4 +113,11 @@ def client_focus(client: object, window: object) -> None:
 @hook.subscribe.screen_change
 def screen_change() -> None:
     """Handle screen configuration changes."""
-    pass
+    paths = compute_paths()
+    cfg = load_cfg(paths)
+    if not cfg.trandr.screen_change_profile:
+        return
+    try:
+        apply_profile(cfg.trandr.screen_change_profile, check=False)
+    except Exception as exc:  # pragma: no cover - Qtile runtime path
+        LOG.warning("failed to reapply trandr profile on screen change: %s", exc)

@@ -6,7 +6,17 @@ have() { command -v "$1" >/dev/null 2>&1; }
 run_bg_once() { pgrep -xu "$USER" "$1" >/dev/null 2>&1 || "$@" & }
 
 # 1) Screen layout
-xrandr --output DVI-I-2-2 --mode 5120x1440 --pos 1920x0 --primary --output DVI-I-1-1 --mode 2560x1440 --rate 60 --pos 7040x0 --output eDP-1 --mode 1920x1200 --pos 0x0
+if have trandr; then
+  if [[ -n "${TRANDR_STARTUP_PROFILE:-}" ]]; then
+    trandr apply --profile "${TRANDR_STARTUP_PROFILE}" || true
+  elif [[ -n "${TRANDR_INFER_LAPTOP_POSITION:-}" ]]; then
+    trandr infer --laptop "${TRANDR_INFER_LAPTOP_POSITION}" --primary "${TRANDR_PRIMARY:-laptop}" --apply || true
+  else
+    xrandr --output DVI-I-2-2 --mode 5120x1440 --pos 1920x0 --primary --output DVI-I-1-1 --mode 2560x1440 --rate 60 --pos 7040x0 --output eDP-1 --mode 1920x1200 --pos 0x0 || true
+  fi
+else
+  xrandr --output DVI-I-2-2 --mode 5120x1440 --pos 1920x0 --primary --output DVI-I-1-1 --mode 2560x1440 --rate 60 --pos 7040x0 --output eDP-1 --mode 1920x1200 --pos 0x0 || true
+fi
 
 # 2) Wallpaper (no per-output hardcoding)
 WALLPAPER="${WALLPAPER:-$HOME/Pictures/vivek-kumar-JS_ohjocm00-unsplash.jpg}"

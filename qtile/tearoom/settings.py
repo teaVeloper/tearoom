@@ -5,7 +5,7 @@ settings
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -32,15 +32,24 @@ class CoreCfg:
     follow_mouse_focus: bool = False
     wmname: str = "LG3D"
     autostart_script: Path | None = None  # user override only
-    use_autorandr: bool = True
     set_wallpaper: bool = True  # allow disabling wallpaper logic
 
 
 @dataclass(frozen=True)
+class TrandrCfg:
+    enabled: bool = True
+    startup_profile: str | None = None
+    startup_laptop_position: str | None = None
+    primary: str = "laptop"
+    screen_change_profile: str | None = None
+
+
+@dataclass(frozen=True)
 class TearoomCfg:
-    apps: AppsCfg = AppsCfg()
-    bar: BarCfg = BarCfg()
-    core: CoreCfg = CoreCfg()
+    apps: AppsCfg = field(default_factory=AppsCfg)
+    bar: BarCfg = field(default_factory=BarCfg)
+    core: CoreCfg = field(default_factory=CoreCfg)
+    trandr: TrandrCfg = field(default_factory=TrandrCfg)
 
 
 def _read_toml(path: Path) -> dict[str, Any]:
@@ -88,6 +97,7 @@ def load_cfg(paths: TearoomPaths) -> TearoomCfg:
     apps_d = data.get("apps", {}) if isinstance(data.get("apps"), dict) else {}
     bar_d = data.get("bar", {}) if isinstance(data.get("bar"), dict) else {}
     core_d = data.get("core", {}) if isinstance(data.get("core"), dict) else {}
+    trandr_d = data.get("trandr", {}) if isinstance(data.get("trandr"), dict) else {}
 
     apps = AppsCfg(
         terminal=str(_deep_get(apps_d, "terminal", AppsCfg.terminal)),
@@ -109,11 +119,26 @@ def load_cfg(paths: TearoomPaths) -> TearoomCfg:
             _deep_get(core_d, "follow_mouse_focus", CoreCfg.follow_mouse_focus)
         ),
         wmname=str(_deep_get(core_d, "wmname", CoreCfg.wmname)),
-        autostart_script=str(
-            _deep_get(core_d, "autostart_script", CoreCfg.autostart_script)
+        autostart_script=(
+            Path(str(_deep_get(core_d, "autostart_script", ""))).expanduser()
+            if _deep_get(core_d, "autostart_script", None)
+            else None
         ),
-        wallpaper=str(_deep_get(core_d, "wallpaper", CoreCfg.wallpaper)),
-        use_autorandr=bool(_deep_get(core_d, "use_autorandr", CoreCfg.use_autorandr)),
+        set_wallpaper=bool(_deep_get(core_d, "set_wallpaper", CoreCfg.set_wallpaper)),
     )
 
-    return TearoomCfg(apps=apps, bar=bar, core=core)
+    trandr = TrandrCfg(
+        enabled=bool(_deep_get(trandr_d, "enabled", TrandrCfg.enabled)),
+        startup_profile=(
+            str(_deep_get(trandr_d, "startup_profile", "")).strip() or None
+        ),
+        startup_laptop_position=(
+            str(_deep_get(trandr_d, "startup_laptop_position", "")).strip() or None
+        ),
+        primary=str(_deep_get(trandr_d, "primary", TrandrCfg.primary)),
+        screen_change_profile=(
+            str(_deep_get(trandr_d, "screen_change_profile", "")).strip() or None
+        ),
+    )
+
+    return TearoomCfg(apps=apps, bar=bar, core=core, trandr=trandr)

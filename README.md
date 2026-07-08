@@ -100,3 +100,14 @@ make check-keys
 - **Distro-agnostic** - Works on Ubuntu, Arch, and other distributions
 - **Fast startup** - No blocking operations during import
 - **Type safety** - Full Python 3.10+ type hints throughout
+- **Trandr integration** - Qtile can apply display profiles from the separate `trandr` repo/package
+
+## Trandr
+
+`trandr` stays a separate repo and CLI. `tearoom` integrates with it through
+`tearoom.display.trandr`, preferring the installed system package and falling
+back to the sibling repo under `${TEAGARDEN_HOME}/trandr` for local development.
+
+The default config file is [qtile/defaults/config.toml](/home/bertold/src/teagarden/tearoom/qtile/defaults/config.toml).
+Set either `trandr.startup_profile` or `trandr.startup_laptop_position` there
+or in your user override under `${XDG_CONFIG_HOME}/teagarden/tearoom/config.toml`.

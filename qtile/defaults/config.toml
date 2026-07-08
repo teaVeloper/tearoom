@@ -1,0 +1,15 @@
+[core]
+follow_mouse_focus = false
+wmname = "LG3D"
+set_wallpaper = true
+
+[trandr]
+enabled = true
+
+# Configure one startup strategy.
+# startup_profile = "laptop-only"
+# startup_laptop_position = "left"
+# primary = "laptop"
+
+# Optional reapply on hotplug events.
+# screen_change_profile = "laptop-only"
